@@ -64,6 +64,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // загрузка
         $thumb = imagecreatetruecolor($thumb_width, $thumb_height);
         $source = imagecreatefromjpeg($path . $_FILES['picture']['name']);
+        $im = imagecreatefromjpeg('file.jpeg');
+        $stamp = imagecreatetruecolor(50, 50);
+        imagefilledrectangle($stamp, 0, 0, 99, 69, 0x0000FF);
+        imagefilledrectangle($stamp, 5, 5, 90, 60, 0xFFFFFF);
+        imagestring($stamp, 3, 10, 10, 'libGD', 0x0000FF);
+        imagestring($stamp, 1, 10, 30, '(c) 2007-9', 0x0000FF);
+
+        $marge_right = 10;
+        $marge_bottom = 10;
+        $sx = imagesx($stamp);
+        $sy = imagesy($stamp);
+
+
 
         // изменение размера
         imagecopyresized($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
@@ -75,7 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $new_width, $new_height,
             $width, $height);
         imagejpeg($thumb, "file.jpeg", 100);
-
+        imagecopymerge($im, $stamp, imagesx($im) - $sx - $marge_right, imagesy($im) - $sy - $marge_bottom, 0, 0, imagesx($stamp), imagesy($stamp), 30);
+        imagepng($im, 'photo_stamp.png');
 
         // вывод
         /*imagejpeg($thumb, "file.jpeg");
@@ -95,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // вывод
         imagejpeg($thumbmin, "mini.jpeg");
         echo '<img src="mini.jpeg">';*/
-        echo '<img src="file.jpeg">' . ' ';
+        echo '<img src="photo_stamp.png">' . ' ';
 
 
 
