@@ -41,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $newwidth = 200;
         $newheight = 100;
 
-
         $thumb_width = 250;
         $thumb_height = 170;
         $original_aspect = $width / $height;
@@ -64,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // загрузка
         $thumb = imagecreatetruecolor($thumb_width, $thumb_height);
         $source = imagecreatefromjpeg($path . $_FILES['picture']['name']);
-        $im = imagecreatefromjpeg('file.jpeg');
+        $im = imagecreatefromjpeg($path . $_FILES['picture']['name']);
         $stamp = imagecreatetruecolor(50, 50);
         imagefilledrectangle($stamp, 0, 0, 99, 69, 0x0000FF);
         imagefilledrectangle($stamp, 5, 5, 90, 60, 0xFFFFFF);
@@ -77,9 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sy = imagesy($stamp);
 
 
-
         // изменение размера
-        imagecopyresized($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+        //imagecopyresized($thumb, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
 
         imagecopyresampled($thumb, $source,
             0 - ($new_width - $thumb_width) / 2, // Center the image horizontally
@@ -87,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             0, 0,
             $new_width, $new_height,
             $width, $height);
-        imagejpeg($thumb, "file.jpeg", 100);
+        imagejpeg($thumb, $_FILES['picture']['name'], 100);
         imagecopymerge($im, $stamp, imagesx($im) - $sx - $marge_right, imagesy($im) - $sy - $marge_bottom, 0, 0, imagesx($stamp), imagesy($stamp), 30);
         imagepng($im, 'photo_stamp.png');
 
@@ -110,6 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         imagejpeg($thumbmin, "mini.jpeg");
         echo '<img src="mini.jpeg">';*/
         echo '<img src="photo_stamp.png">' . ' ';
+        //echo '<img src="' . $path . $_FILES['picture']['name'] . '">' . ' ';
 
 
 
